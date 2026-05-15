@@ -2,14 +2,24 @@
   "name": "bokeh-rain",
   "private": true,
   "version": "0.1.0",
+  "description": "光の雨が降る様子を描く Canvas アニメーション SPA",
+  "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yamadar/bokeh-rain.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
-    "vite": "^6.0.7"
+    "prettier": "^3.4.2",
+    "vite": "^6.0.7",
+    "vitest": "^3.0.0"
   }
 }

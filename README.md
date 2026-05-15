@@ -1,30 +1,32 @@
 # Bokeh Rain
 
-光の雨が降る様子を描画する Canvas アニメーション SPA。
+光の雨が降る様子を描く Canvas アニメーション SPA。
 
-## 起動
+## セットアップ
 
 ```bash
-npm install        # リポジトリルートで一度だけ
-npm run dev -w bokeh-rain
+npm install
+```
+
+## 開発
+
+```bash
+npm run dev
 ```
 
 `http://localhost:5181/` が自動で開きます。
 
-## ビルド
+## テスト・ビルド
 
 ```bash
-npm run build -w bokeh-rain
+npm test
+npm run build
 ```
 
-## 構成
+## アーキテクチャ
 
-```
-bokeh-rain/
-├── index.html      # マークアップのみ
-├── vite.config.js
-├── package.json
-└── src/
-    ├── main.js     # ロジック（style.css を import）
-    └── style.css   # スタイル
-```
+モジュール構成・設計の詳細は [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) を参照。
+
+## ライセンス
+
+[MIT](./LICENSE)
