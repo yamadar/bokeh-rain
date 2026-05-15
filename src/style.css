@@ -1,0 +1,89 @@
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%; overflow: hidden;
+    background: #05000d;
+  }
+
+  /* グラデ要素共通の background — 空と反射で共有 */
+  .gradient-bg, .reflection {
+    background:
+      /* 右上の暖色ハイライト (黄→オレンジ) */
+      radial-gradient(ellipse 70% 60% at 75% 25%, #ffb84d 0%, #ff7a1a 30%, transparent 65%),
+      /* 中央の柔らかい黄色グロー */
+      radial-gradient(ellipse 50% 45% at 55% 35%, #ffd97a 0%, transparent 60%),
+      /* 右下の深い赤 */
+      radial-gradient(ellipse 65% 70% at 85% 90%, #c01838 0%, #6b0a1f 45%, transparent 75%),
+      /* 左下〜左の暗い青 */
+      radial-gradient(ellipse 70% 80% at 10% 75%, #0a3a7a 0%, #061a45 45%, transparent 75%),
+      /* 左上の暗い青 */
+      radial-gradient(ellipse 60% 55% at 5% 15%, #0c2a5c 0%, transparent 65%),
+      /* ベース: 左青→右暖色の横グラデ */
+      linear-gradient(100deg, #061230 0%, #0a1a48 25%, #1a1538 50%, #3a1228 70%, #5a1a1a 90%, #6b2a14 100%);
+    background-size: 130% 130%, 140% 140%, 140% 140%, 140% 140%, 130% 130%, 200% 200%;
+  }
+
+  /* 空 — 水平線(60%)を越えて少し下まで描き、長く mask フェード → 境界が消える */
+  .gradient-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 68%;                       /* 水平線を約8%越える */
+    animation: drift 48s ease-in-out infinite, hueCycle 90s linear infinite;
+    filter: saturate(1.15);
+    /* 要素内 0%〜76% (= viewport 0%〜52%) 不透明、76%〜100% (= viewport 52%〜68%) でフェード */
+    -webkit-mask: linear-gradient(to bottom, #000 0%, #000 76%, transparent 100%);
+            mask: linear-gradient(to bottom, #000 0%, #000 76%, transparent 100%);
+  }
+
+  /* 水面反射 — 水平線(60%)から下端(100%)まで地面全面を覆う */
+  .reflection {
+    position: fixed;
+    top: 60%;
+    left: 0;
+    right: 0;
+    height: 40%;
+    transform: scaleY(-1);
+    opacity: 0.45;
+    animation: drift 48s ease-in-out infinite, hueCycleReflection 90s linear infinite;
+    /* 反射の強度: 水平線側=強い、下端(手前)=弱い (水面の自然な反射特性) */
+    -webkit-mask: linear-gradient(to top, transparent 0%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.65) 65%, #000 100%);
+            mask: linear-gradient(to top, transparent 0%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.65) 65%, #000 100%);
+    pointer-events: none;
+  }
+
+  @keyframes drift {
+    0%   {background-position: 0% 0%, 100% 50%, 100% 100%, 0% 100%, 0% 0%, 0% 50%}
+    33%  {background-position: 10% 8%, 92% 60%, 95% 92%, 5% 95%, 4% 4%, 30% 50%}
+    66%  {background-position: 5% 4%, 105% 45%, 100% 105%, -3% 102%, -2% 6%, 60% 50%}
+    100% {background-position: 0% 0%, 100% 50%, 100% 100%, 0% 100%, 0% 0%, 0% 50%}
+  }
+  @keyframes hueCycle {
+    0%   {filter: saturate(1.15) hue-rotate(0deg)}
+    100% {filter: saturate(1.15) hue-rotate(360deg)}
+  }
+  @keyframes hueCycleReflection {
+    0%   {filter: saturate(1.15) blur(7px) hue-rotate(0deg)}
+    100% {filter: saturate(1.15) blur(7px) hue-rotate(360deg)}
+  }
+
+  /* 地面 — 水平線より少し上から始め、上端をフェードインさせて空と重ねる */
+  .ground {
+    position: fixed;
+    top: 55%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #414359;
+    /* 要素内 0%〜0% 透明、0%〜25% (= viewport 55%〜66%) でフェードイン、以降不透明 */
+    -webkit-mask: linear-gradient(to bottom, transparent 0%, #000 25%);
+            mask: linear-gradient(to bottom, transparent 0%, #000 25%);
+    pointer-events: none;
+  }
+
+  canvas {
+    position: fixed;
+    inset: 0;
+    mix-blend-mode: plus-lighter;
+    pointer-events: none;
+  }
