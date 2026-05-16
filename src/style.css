@@ -87,3 +87,24 @@
     mix-blend-mode: plus-lighter;
     pointer-events: none;
   }
+
+  /* 雪モード切り替えボタン */
+  #snow-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+    padding: 8px 16px;
+    font: 13px/1.4 system-ui, -apple-system, sans-serif;
+    color: #f3f0ff;
+    background: rgba(20, 16, 40, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease, transform 0.1s ease;
+  }
+  #snow-toggle:hover { background: rgba(40, 34, 70, 0.7); }
+  #snow-toggle:active { transform: scale(0.96); }
