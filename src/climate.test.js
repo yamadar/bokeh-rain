@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { oscillate, isSnowHour, climateAt } from './climate.js';
+import { oscillate, isSnowHour, climateAt, resolveSnow } from './climate.js';
 import { INTENSITY_MIN, SPEED_MIN } from './config.js';
 
 describe('oscillate', () => {
@@ -68,5 +68,22 @@ describe('climateAt', () => {
   it('時刻で雪モードが決まる', () => {
     expect(climateAt(0, new Date(2026, 0, 1, 23)).snow).toBe(true);
     expect(climateAt(0, new Date(2026, 0, 1, 12)).snow).toBe(false);
+  });
+});
+
+describe('resolveSnow', () => {
+  it("'auto' は時刻判定(timeSnow)に従う", () => {
+    expect(resolveSnow('auto', true)).toBe(true);
+    expect(resolveSnow('auto', false)).toBe(false);
+  });
+
+  it("'snow' は時刻を無視して常に真", () => {
+    expect(resolveSnow('snow', false)).toBe(true);
+    expect(resolveSnow('snow', true)).toBe(true);
+  });
+
+  it("'rain' は時刻を無視して常に偽", () => {
+    expect(resolveSnow('rain', true)).toBe(false);
+    expect(resolveSnow('rain', false)).toBe(false);
   });
 });

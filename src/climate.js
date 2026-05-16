@@ -32,3 +32,11 @@ export function climateAt(timeMs, date) {
     snow: isSnowHour(date.getHours()),
   };
 }
+
+// 雪モードの手動オーバーライドを反映する。
+// 'snow'/'rain' は固定、'auto' は時刻判定(timeSnow)に従う。
+export function resolveSnow(override, timeSnow) {
+  if (override === 'snow') return true;
+  if (override === 'rain') return false;
+  return timeSnow;
+}

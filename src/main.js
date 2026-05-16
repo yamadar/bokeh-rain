@@ -5,7 +5,7 @@
 import './style.css';
 import { DROP_COUNT, RAIN_PALETTE, SNOW_PALETTE } from './config.js';
 import { buildSprites, buildSplashSprite, buildRippleSprites } from './sprites.js';
-import { climateAt } from './climate.js';
+import { climateAt, resolveSnow } from './climate.js';
 import { Drop } from './drop.js';
 
 (() => {
@@ -58,11 +58,26 @@ import { Drop } from './drop.js';
   const drops = [];
   for (let i = 0; i < DROP_COUNT; i++) drops.push(new Drop(view, true));
 
+  // 雪モードのトグル — 自動(時刻判定) → 雪 → 雨 を巡回。
+  const snowModes = [
+    { override: 'auto', label: '雪モード: 自動' },
+    { override: 'snow', label: '雪モード: 雪' },
+    { override: 'rain', label: '雪モード: 雨' },
+  ];
+  let snowModeIndex = 0;
+  const snowToggle = document.getElementById('snow-toggle');
+  snowToggle.textContent = snowModes[snowModeIndex].label;
+  snowToggle.addEventListener('click', () => {
+    snowModeIndex = (snowModeIndex + 1) % snowModes.length;
+    snowToggle.textContent = snowModes[snowModeIndex].label;
+  });
+
   const t0 = performance.now();
 
   function frame() {
-    // 天候を更新 — 量/速度は時間で増減、雪モードは時刻で切り替わる。
+    // 天候を更新 — 量/速度は時間で増減、雪モードは時刻判定をボタンで上書き可。
     view.climate = climateAt(performance.now() - t0, new Date());
+    view.climate.snow = resolveSnow(snowModes[snowModeIndex].override, view.climate.snow);
     const kit = view.climate.snow ? snowKit : rainKit;
     view.sprites = kit.sprites;
     view.splashSprite = kit.splashSprite;
